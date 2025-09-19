@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="m-0">Collections</h2>
+    <div><strong>Total:</strong> <span id="cartTotal">₹0</span></div>
+  </div>
+
+  <!-- Category buttons -->
+  <div class="mb-3" id="categoryButtons"></div>
+
+  <!-- Product list -->
+  <div class="row" id="productList"></div>
+
+  <!-- Cart section -->
+  <div class="card mt-3">
+    <div class="card-header">Cart</div>
+    <ul class="list-group list-group-flush" id="cartItems"></ul>
+  </div>
+
+  <!-- Checkout form -->
+  <div class="text-center my-4">
+    <form action="{{ url_for('address') }}" method="post" id="checkoutForm">
+      <!-- Hidden input to send cart JSON -->
+      <input type="hidden" name="cart_json" id="cartJsonInput">
+
+      <div class="btn-container">
+        <button type="submit" class="btn-glow">Total Price & Continue</button>
+      </div>
+    </form>
+    <div id="checkoutError" class="text-danger mt-2" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- ================= CSS ================= -->
+<style>
+* {
+  margin: 0; padding: 0; box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Button container */
+.btn-container {
+  display: inline-block;
+  position: relative;
+}
+
+/* Glowing button */
+.btn-glow {
+  position: relative;
+  display: inline-block;
+  padding: 15px 40px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(25, 135, 84, 0.8);
+  border: none;
+  border-radius: 36px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: 0.5s;
+  text-align: center;
+  letter-spacing: 1px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 5px 25px rgba(25, 135, 84, 0.6);
+}
+
+/* Hover effects */
+.btn-glow:hover {
+  background: rgba(25, 135, 84, 1);
+  box-shadow: 0 0 10px #19c95a, 0 0 20px #19c95a, 0 0 40px #19c95a;
+  letter-spacing: 2px;
+}
+
+/* Shimmer effect */
+.btn-glow::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.15), rgba(255,255,255,0.5), rgba(255,255,255,0.15));
+  transform: skewX(-25deg);
+  transition: 0.5s;
+}
+.btn-glow:hover::before {
+  left: 125%;
+}
+</style>
+
+<!-- ================= JS ================= -->
+<script src="{{ url_for('static', filename='js/products.js') }}"></script>
+<script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+
+<script>
+document.getElementById("checkoutForm").addEventListener("submit", function(e) {
+  // Get current total price from UI
+  const totalText = document.getElementById("cartTotal").textContent.replace(/[^\d.]/g, "");
+  const total = parseFloat(totalText) || 0;
+
+  if (total < 1) {
+    e.preventDefault();
+    document.getElementById("checkoutError").textContent = "⚠️ Minimum purchase should be ₹1.";
+    document.getElementById("checkoutError").style.display = "block";
+    return false;
+  }
+
+  // Add cart JSON to hidden input if total is valid
+  document.getElementById("cartJsonInput").value = JSON.stringify(cart);
+  return true;
+});
+</script>
+{% endblock %}

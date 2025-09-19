@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Check Order Status</h3>
+<form method="POST" class="row g-3 mb-4">
+  <div class="col-md-6">
+    <label class="form-label">Enter Order ID</label>
+    <input class="form-control" name="order_id" placeholder="e.g., DM250101123456" required>
+  </div>
+  <div class="col-12">
+    <button class="btn btn-dark">Check</button>
+  </div>
+</form>
+{% if result %}
+  {% if result == 'NOT_FOUND' %}
+    <div class="alert alert-warning">Order not found.</div>
+  {% else %}
+    <div class="alert alert-info">Order <strong>{{ result.order_id }}</strong> status: <strong>{{ result.status }}</strong></div>
+  {% endif %}
+{% endif %}
+{% endblock %}

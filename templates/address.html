@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Enter Your Address</h2>
+
+  <form method="POST" action="{{ url_for('payment') }}">
+    <!-- Name -->
+    <div class="mb-3">
+      <label for="name" class="form-label">Full Name</label>
+      <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+
+    <!-- Phone -->
+    <div class="mb-3">
+      <label for="phone" class="form-label">Phone</label>
+      <input type="text" class="form-control" id="phone" name="phone" required>
+    </div>
+
+    <!-- Email -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+
+    <!-- Street -->
+    <div class="mb-3">
+      <label for="street" class="form-label">Street</label>
+      <input type="text" class="form-control" id="street" name="street" required>
+    </div>
+
+    <!-- Town -->
+    <div class="mb-3">
+      <label for="town" class="form-label">Town/City</label>
+      <input type="text" class="form-control" id="town" name="town" required>
+    </div>
+
+    <!-- District -->
+    <div class="mb-3">
+      <label for="district" class="form-label">District</label>
+      <input type="text" class="form-control" id="district" name="district" required>
+    </div>
+
+    <!-- State -->
+    <div class="mb-3">
+      <label for="state" class="form-label">State</label>
+      <input type="text" class="form-control" id="state" name="state" required>
+    </div>
+
+    <!-- Country -->
+    <div class="mb-3">
+      <label for="country" class="form-label">Country</label>
+      <input type="text" class="form-control" id="country" name="country" required>
+    </div>
+
+    <!-- Cart Summary -->
+    <h4 class="mt-4">Your Cart</h4>
+    <ul class="list-group mb-3">
+      {% for name, items in cart.items() %}
+        {% if name != 'total' %}
+          {% for item in items %}
+            <li class="list-group-item d-flex justify-content-between">
+              <div>
+                {{ name }} (Size: {{ item.size }}) x {{ item.qty }}
+              </div>
+              <div>
+                ₹{{ item.price * item.qty }}
+              </div>
+            </li>
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+      <li class="list-group-item d-flex justify-content-between">
+        <strong>Total</strong>
+        <strong>₹{{ total }}</strong>
+      </li>
+    </ul>
+
+    <button type="submit" class="btn btn-primary w-100">Proceed to Payment</button>
+  </form>
+</div>
+{% endblock %}
